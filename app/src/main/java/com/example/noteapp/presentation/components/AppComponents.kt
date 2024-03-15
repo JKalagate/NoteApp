@@ -10,7 +10,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -80,10 +79,9 @@ fun NormalTextComponent(value: String) {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppTextFieldComponent(
-    labelValue: String,
+    value: String,
     painterResource: ImageVector,
     onTextChanged: (String) -> Unit,
 ) {
@@ -95,12 +93,14 @@ fun AppTextFieldComponent(
         modifier = Modifier
             .fillMaxWidth()
             .clip(componentShapes.small),
-        label = { Text(text = labelValue) },
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Primary,
-            unfocusedBorderColor = FrameColor,
+        label = { Text(text = value) },
+        colors = TextFieldDefaults.colors(
+            focusedIndicatorColor = Primary,
+            unfocusedIndicatorColor = FrameColor,
             cursorColor = Primary,
-            containerColor = BgColor,
+            focusedLabelColor = Primary,
+            focusedContainerColor = BgColor,
+            unfocusedContainerColor = BgColor,
             errorContainerColor = BgColor
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
@@ -118,15 +118,12 @@ fun AppTextFieldComponent(
     )
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PasswordTextFieldComponent(
-    labelValue: String,
+    value: String,
     painterResource: Painter,
     onTextChanged: (String) -> Unit,
 ) {
-
     val localFocusManager = LocalFocusManager.current
 
     var password by remember { mutableStateOf("") }
@@ -136,24 +133,29 @@ fun PasswordTextFieldComponent(
     }
     var isTextFieldClicked by remember { mutableStateOf(false) }
 
+
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth()
             .clip(componentShapes.small),
-        label = { Text(text = labelValue) },
+        singleLine = true,
+        label = {
+            Text(text = value)
+        },
         value = password,
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Primary,
-            unfocusedBorderColor = FrameColor,
+        colors = TextFieldDefaults.colors(
+            focusedIndicatorColor = Primary,
+            unfocusedIndicatorColor = FrameColor,
+            focusedLabelColor = Primary,
             cursorColor = Primary,
-            containerColor = BgColor,
+            focusedContainerColor = BgColor,
+            unfocusedContainerColor = BgColor,
             errorContainerColor = BgColor
         ),
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password,
             imeAction = ImeAction.Done
         ),
-        singleLine = true,
         keyboardActions = KeyboardActions {
             localFocusManager.clearFocus()
         },
