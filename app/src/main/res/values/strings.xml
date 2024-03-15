@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">NoteApp</string>
+    <string name="hide_password">Hide password</string>
+    <string name="show_password">Show password\n</string>
+    <string name="login_in">Log in</string>
+    <string name="welcome">Welcome!</string>
+    <string name="email">Email\n</string>
+    <string name="password">Password\n</string>
+    <string name="sign_up">Sing Up</string>
+    <string name="continueSignUp">To continue. Sign Up</string>
+    <string name="name">Name\n</string>
+    <string name="register">Register</string>
+</resources>
