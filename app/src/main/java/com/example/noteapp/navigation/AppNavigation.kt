@@ -6,6 +6,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.noteapp.presentation.login.LoginViewModel
 import com.example.noteapp.presentation.register.RegistrationViewModel
 import com.example.noteapp.presentation.screens.LoginScreen
 import com.example.noteapp.presentation.screens.RegistrationScreen
@@ -21,7 +22,7 @@ fun AppNavigationGraph() {
         startDestination = Screens.LoginScreen.route,
         builder = {
             composable(route = Screens.LoginScreen.route) {
-                LoginScreen(navController = navController)
+                LoginScreen(navController = navController, hiltViewModel<LoginViewModel>())
 
             }
             composable(route = Screens.RegistrationScreen.route) {
