@@ -15,15 +15,18 @@ class AuthRepository @Inject constructor(
 
     suspend fun createUser(
         email:String,
-        password:String)
-            = withContext(Dispatchers.IO) {
+        password:String,
+        onComplete: (Boolean) -> Unit
+        ) = withContext(Dispatchers.IO) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener{
                 if (it.isSuccessful) {
                     Log.e(TAG, "Create Success:${it.isSuccessful}")
+                    onComplete.invoke(true)
                 }
             }.addOnFailureListener{
                 Log.e(TAG, "Exception = ${it.localizedMessage}")
+                onComplete.invoke(false)
             }.await()
     }
 

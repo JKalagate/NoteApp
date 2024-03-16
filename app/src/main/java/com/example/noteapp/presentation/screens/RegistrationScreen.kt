@@ -1,5 +1,6 @@
 package com.example.noteapp.presentation.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,7 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.noteapp.R
 import com.example.noteapp.domain.ui.RegistrationUIEvent
@@ -29,6 +30,7 @@ import com.example.noteapp.navigation.Screens
 import com.example.noteapp.presentation.components.AppTextFieldComponent
 import com.example.noteapp.presentation.components.ButtonComponents
 import com.example.noteapp.presentation.components.HeadingTextComponent
+import com.example.noteapp.presentation.components.ProblemTextComponent
 import com.example.noteapp.presentation.components.NormalTextComponent
 import com.example.noteapp.presentation.components.PasswordTextFieldComponent
 import com.example.noteapp.presentation.components.TextComponent
@@ -38,7 +40,7 @@ import com.example.noteapp.ui.theme.BgLightBlue
 @Composable
 fun RegistrationScreen(
     navController: NavHostController,
-    registerViewModel: RegistrationViewModel = viewModel()
+    registerViewModel: RegistrationViewModel = hiltViewModel()
 ) {
 
     Box(
@@ -64,26 +66,37 @@ fun RegistrationScreen(
 
                 Spacer(modifier = Modifier.height(80.dp))
 
+                if (registerViewModel.incorrectReg) {
+                    Log.d("tata", "before ${registerViewModel.incorrectReg}")
+                    ProblemTextComponent(value = stringResource(id = R.string.incorrect_register))
+                } else {
+                    Log.d("tata", "after ${registerViewModel.incorrectReg}")
+                }
+
+
                 AppTextFieldComponent(
                     value = stringResource(id = R.string.name),
                     painterResource = Icons.Default.Person,
                     onTextChanged = {
                         registerViewModel.onEvent(RegistrationUIEvent.NameChange(it))
-                    }
+                    },
+                    errorStatus = registerViewModel.registrationUIState.nameError
                 )
                 AppTextFieldComponent(
                     value = stringResource(id = R.string.email),
                     painterResource = Icons.Default.Email,
                     onTextChanged = {
                         registerViewModel.onEvent(RegistrationUIEvent.EmailChange(it))
-                    }
+                    },
+                    errorStatus = registerViewModel.registrationUIState.emailError
                 )
                 PasswordTextFieldComponent(
                     value = stringResource(id = R.string.password),
                     painterResource = painterResource(id = R.drawable.lock),
                     onTextChanged = {
                         registerViewModel.onEvent(RegistrationUIEvent.PasswordChange(it))
-                    }
+                    },
+                    errorStatus = registerViewModel.registrationUIState.passwordError
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -91,9 +104,11 @@ fun RegistrationScreen(
                 ButtonComponents(
                     value = stringResource(id = R.string.register),
                     onButtonClicked = {
-                        registerViewModel.onEvent(RegistrationUIEvent.RegistrationButtonClicked)
+                        registerViewModel.createAccount {
+                            navController.navigate("${Screens.HomeScreen.route}?firstLog=${"first"}")
+                        }
                     },
-                    isEnabled = true
+                    isEnabled = registerViewModel.allValidationPassed
                 )
 
                 TextComponent(

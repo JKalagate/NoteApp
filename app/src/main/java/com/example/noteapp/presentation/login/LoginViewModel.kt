@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.noteapp.data.repository.AuthRepository
 import com.example.noteapp.domain.ui.LoginUIEvent
+import com.example.noteapp.domain.validators.Validator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +21,6 @@ class LoginViewModel @Inject constructor(
     private val repository: AuthRepository,
 ) : ViewModel() {
 
-
     private val TAG = LoginViewModel::class.simpleName
 
     var loginUiState by mutableStateOf(LoginUIState())
@@ -29,8 +29,14 @@ class LoginViewModel @Inject constructor(
 
     var incorrect by mutableStateOf(false)
 
-    fun onEvent(event: LoginUIEvent) {
+    var allValidationPassed by mutableStateOf(false)
 
+    private val validationScope = CoroutineScope(Dispatchers.Default)
+
+    fun onEvent(event: LoginUIEvent) {
+        validationScope.launch {
+            validateDataWithRules()
+        }
         when (event) {
             is LoginUIEvent.EmailChange -> {
                 loginUiState = loginUiState.copy(
@@ -46,6 +52,24 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    private suspend fun validateDataWithRules() = withContext(Dispatchers.Default) {
+
+        val emailResult = Validator.validateEmail(
+            email = loginUiState.email
+        )
+        val passwordResult = Validator.validatePassword(
+            password = loginUiState.password
+        )
+
+        loginUiState = loginUiState.copy(
+            emailError = emailResult.status,
+            passwordError = passwordResult.status
+        )
+
+        allValidationPassed = emailResult.status && passwordResult.status
+
+    }
+
 
     fun login(onComplete: () -> Unit) = viewModelScope.launch {
         try {
@@ -57,6 +81,8 @@ class LoginViewModel @Inject constructor(
                 if (isSuccessful) {
                     onComplete.invoke()
                     incorrect = false
+                    loginUiState = loginUiState.copy(email = "", password = "")
+                    allValidationPassed = false
                 } else {
                     incorrect = true
                 }

@@ -10,4 +10,13 @@
     <string name="continueSignUp">To continue. Sign Up</string>
     <string name="name">Name</string>
     <string name="register">Register</string>
+    <string name="incorrect_login">The provided email or password is incorrect.</string>
+    <string name="new_note">" Note"</string>
+    <string name="your_notes">Your Notes</string>
+    <string name="update_note">Update Note</string>
+    <string name="add_note">Add Note</string>
+    <string name="save">SAVE</string>
+    <string name="title">Title</string>
+    <string name="note">Note</string>
+    <string name="incorrect_register">The email address is already in use</string>
 </resources>

@@ -1,6 +1,10 @@
 package com.example.noteapp.presentation.login
 
 data class LoginUIState (
-    var email: String = "",
-    var password: String = "",
+    val email: String = "",
+    val password: String = "",
+
+    val emailError: Boolean = false,
+    val passwordError: Boolean = false
+
 )

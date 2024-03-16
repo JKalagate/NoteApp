@@ -84,6 +84,7 @@ fun AppTextFieldComponent(
     value: String,
     painterResource: ImageVector,
     onTextChanged: (String) -> Unit,
+    errorStatus: Boolean = false
 ) {
     var textValue by remember { mutableStateOf("") }
 
@@ -115,6 +116,7 @@ fun AppTextFieldComponent(
         leadingIcon = {
             Icon(imageVector = painterResource, contentDescription = null)
         },
+        isError = !errorStatus && isTextFieldClicked
     )
 }
 
@@ -123,6 +125,7 @@ fun PasswordTextFieldComponent(
     value: String,
     painterResource: Painter,
     onTextChanged: (String) -> Unit,
+    errorStatus: Boolean = false
 ) {
     val localFocusManager = LocalFocusManager.current
 
@@ -168,6 +171,7 @@ fun PasswordTextFieldComponent(
         leadingIcon = {
             Icon(painter = painterResource, contentDescription = null)
         },
+        isError = !errorStatus && isTextFieldClicked,
         trailingIcon = {
             val iconImage: Painter = if (passwordVisible) {
                 painterResource(id = R.drawable.visibility)
@@ -186,6 +190,7 @@ fun PasswordTextFieldComponent(
         },
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
     )
+
 }
 
 @Composable
@@ -264,4 +269,20 @@ fun TextComponent(
                     }
                 }
         })
+}
+
+@Composable
+fun ProblemTextComponent(value: String) {
+    Text(
+        text = value,
+        modifier = Modifier.fillMaxWidth(),
+        style = TextStyle(
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Normal,
+            fontStyle = FontStyle.Normal
+        ),
+        color = Color.Red,
+        textAlign = TextAlign.Center
+    )
+
 }
