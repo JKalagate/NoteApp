@@ -72,7 +72,7 @@ fun LoginScreen(
                     value = stringResource(id = R.string.email),
                     painterResource = Icons.Default.Email,
                     onTextChanged = {
-                        loginViewModel.onEvent(LoginUIEvent.EmailChange(it))
+                        val a = loginViewModel.onEvent(LoginUIEvent.EmailChange(it))
                     },
                     errorStatus = loginViewModel.loginUiState.emailError
                 )

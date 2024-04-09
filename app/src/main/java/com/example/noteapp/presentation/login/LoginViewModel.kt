@@ -68,7 +68,12 @@ class LoginViewModel @Inject constructor(
 
         allValidationPassed = emailResult.status && passwordResult.status
 
+
+
+
     }
+
+
 
 
     fun login(onComplete: () -> Unit) = viewModelScope.launch {
